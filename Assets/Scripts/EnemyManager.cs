@@ -21,10 +21,9 @@ public class EnemyManager : MonoBehaviour
 
     }
 
-    public void OnTriggerEnter2D(Collider2D other
-        )
+    public void OnTriggerEnter2D(Collider2D other )
     {
-        if (other.tag == "Player" && colliderBusy)
+        if (other.tag == "Player" && !colliderBusy)
         {
             colliderBusy = true;
             other.GetComponent<PlayerManager>().GetDamage(damage);
@@ -56,6 +55,7 @@ public class EnemyManager : MonoBehaviour
         else
         {
             health = 0;
+            Destroy(gameObject);
         }
         slider.value = health;
         AmIDead();
