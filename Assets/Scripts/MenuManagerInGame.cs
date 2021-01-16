@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManagerInGame : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class MenuManagerInGame : MonoBehaviour
     }
     public void ReplayButton()
     {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("InGame");
 
     }
 
@@ -35,7 +38,8 @@ public class MenuManagerInGame : MonoBehaviour
     }
     public void HomeButton()
     {
-
+        Time.timeScale = 1;
+        SceneManager.LoadScene("MenuScene");
     }
 
 

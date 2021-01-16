@@ -49,16 +49,16 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetAxis("Vertical") > 0 && isGrounded && (nextjumpTime < Time.timeSinceLevelLoad))
         {
-            
+            nextAudioFreq = Time.timeSinceLevelLoad + jumpAudioFreq;
             nextjumpTime = Time.timeSinceLevelLoad + jumpFrequency;
             Jump();
             
         }
-        if (Input.GetKeyDown(KeyCode.W) && (nextAudioFreq < Time.timeSinceLevelLoad))
-        {
-            nextAudioFreq = Time.timeSinceLevelLoad + jumpAudioFreq;
-            jumpAudio.Play();
-        }
+        //if (Input.GetKeyDown(KeyCode.W) && (nextAudioFreq < Time.timeSinceLevelLoad))
+        //{
+           
+            
+        //}
     }
 
     void FixedUpdate()
@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
     void Jump()
     {
         playerRB.AddForce(new Vector2(0f,jumpSpeed));
+        jumpAudio.Play();
     }
     void OnGroundCheck()
     {
