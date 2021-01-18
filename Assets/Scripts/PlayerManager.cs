@@ -9,8 +9,9 @@ public class PlayerManager : MonoBehaviour
     bool dead = false;
     public float bulletSpeed = 1f;
 
+
     Transform muzzle;
-    public Transform bullet,floatingText;
+    public Transform bullet, floatingText;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,20 +25,32 @@ public class PlayerManager : MonoBehaviour
         {
             ShootBullet();
         }
+
+
+
     }
-    public void GetDamage(float damage)
+
+
+    public void StayGetDamage(float damage)
     {
 
-        Instantiate(floatingText, transform.position, Quaternion.identity).GetComponent<TextMesh>().text =damage.ToString();  
-        if ((health - damage) >=0) 
+        if ((health - damage) >= 0)
         {
-            health -= damage;
+           health -= damage;
+            
         }
+
         else
         {
             health = 0;
+            Destroy(gameObject);
         }
         AmIDead();
+    }
+
+    IEnumerator StayinDelay()
+    {
+        yield return new WaitForSeconds(5);
     }
 
     void AmIDead()
@@ -48,11 +61,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-     void ShootBullet()
+    void ShootBullet()
     {
         Transform tempBullet;
         tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
-        tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward  * bulletSpeed);      
+        tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
     }
 
 }
