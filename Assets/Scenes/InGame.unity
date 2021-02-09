@@ -2633,6 +2633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 30
   health: 100
+  bullet: 0
   slider: {fileID: 0}
 --- !u!61 &1309291810
 BoxCollider2D:

@@ -7,6 +7,7 @@ public class EnemyManager : MonoBehaviour
 {
     public float damage;
     public float health;
+    public float bullet;
     bool colliderBusy = false;
     public Slider slider;
     void Start()
@@ -21,8 +22,24 @@ public class EnemyManager : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player" && !colliderBusy)
+        {
+            colliderBusy = true;
+            other.GetComponent<PlayerManager>().StayGetDamage(damage);
 
-    public void OnTriggerStay2D(Collider2D other)
+        }
+        if (other.tag == "Bullet")
+        {
+            GetDamage(other.GetComponent<BulletManager>().bulletDamage);
+            Destroy(other.gameObject);
+
+        }
+    }
+
+
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
@@ -37,6 +54,20 @@ public class EnemyManager : MonoBehaviour
 
         }
     }
+
+    public void GetDamage(float damage)
+    {
+        if ((health - damage) >= 0)
+        {
+            health -= damage;
+        }
+        else
+        {
+            health = 0;
+        }
+        AmIDead();
+    }
+
 
 
     void AmIDead()

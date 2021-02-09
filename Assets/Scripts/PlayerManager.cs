@@ -40,18 +40,13 @@ public class PlayerManager : MonoBehaviour
             
         }
 
-        else
+        if ( health <= 0)
         {
-            health = 0;
             Destroy(gameObject);
         }
         AmIDead();
     }
 
-    IEnumerator StayinDelay()
-    {
-        yield return new WaitForSeconds(5);
-    }
 
     void AmIDead()
     {
