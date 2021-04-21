@@ -738,7 +738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
-  bulletSpeed: 10
+  bulletSpeed: 300
   takeDamageSound: {fileID: 2082496227}
   shirukenSound: {fileID: 1197440024}
   slider: {fileID: 132845066}

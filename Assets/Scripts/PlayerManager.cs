@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour
     public float health;
     public float bulletSpeed = 1f;
     private bool dead = false;
+    private bool canShoot = true;
     public AudioSource takeDamageSound;
     public AudioSource shirukenSound;
     // Start is called before the first frame update
@@ -67,13 +68,23 @@ public class PlayerManager : MonoBehaviour
 
     void ShootBullet()
     {
-        Transform tempBullet;
-        tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
-        //tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
-        tempBullet.GetComponent<Rigidbody2D>().AddForce(Vector2.right * bulletSpeed,ForceMode2D.Impulse);
-        tempBullet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 3f,ForceMode2D.Impulse);
-        shirukenSound.Play();
+        if (canShoot)
+        {
+            Transform tempBullet;
+            tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
+            tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
+            shirukenSound.Play();
+            StartCoroutine(ShootDelay());
+        }
+      
     }
 
+    private IEnumerator ShootDelay()
+    {
+        canShoot = false;
+        yield return new WaitForSeconds(1);
+        canShoot = true;
+
+    }
 
 }
