@@ -1,16 +1,14 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletManager : MonoBehaviour
+public class DestoryMe : MonoBehaviour
 {
-    public float bulletDamage, lifeTime;
-
-
+    public int lifeTime;
     // Start is called before the first frame update
     void Start()
     {
-      Destroy(gameObject,lifeTime);
+        Destroy(gameObject, lifeTime);
     }
 
     // Update is called once per frame
@@ -18,6 +16,4 @@ public class BulletManager : MonoBehaviour
     {
         
     }
-
-  
 }

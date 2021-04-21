@@ -37,7 +37,7 @@ public class MenuManagerInGame : MonoBehaviour
 
         
 
-        //Time.timeScale = 1;
+        Time.timeScale = 1;
         inGameScreen.SetActive(true); 
         pauseScreen.SetActive(false);
         

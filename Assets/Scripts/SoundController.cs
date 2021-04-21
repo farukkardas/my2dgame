@@ -6,7 +6,7 @@ public class SoundController : MonoBehaviour
 {
 
     public GameObject audioSource;
-    bool soundToggle = true;
+  
     // Start is called before the first frame update
     void Start()
     {
