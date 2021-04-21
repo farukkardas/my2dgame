@@ -6,13 +6,15 @@ public class PlayerManager : MonoBehaviour
 {
 
     public float health;
+    public float money;
     public float bulletSpeed = 1f;
     private bool dead = false;
     private bool canShoot = true;
+    public GameObject ReplayButton;
     public AudioSource takeDamageSound;
     public AudioSource shirukenSound;
     // Start is called before the first frame update
-
+    public Text moneyText;
     public Slider slider;
     Transform muzzle;
     public Transform bullet, floatingText;
@@ -21,7 +23,7 @@ public class PlayerManager : MonoBehaviour
         muzzle = transform.GetChild(1);
         slider.maxValue = health;
         slider.value = health;
-   
+        moneyText.text = "x " + money.ToString();
     }
 
     // Update is called once per frame
@@ -31,9 +33,8 @@ public class PlayerManager : MonoBehaviour
         {
             ShootBullet();
         }
+       
     }
-
-
 
     public void StayGetDamage(float damage)
     {
@@ -50,7 +51,8 @@ public class PlayerManager : MonoBehaviour
         if ( health <= 0)
         {
             Destroy(gameObject);
-            
+            Time.timeScale = 0;
+            ReplayButton.SetActive(true);
         }
         slider.value = health;
         
@@ -63,8 +65,13 @@ public class PlayerManager : MonoBehaviour
         if (health <= 0)
         {
             dead = true;
+         
         }
+       
+     
     }
+
+    
 
     void ShootBullet()
     {

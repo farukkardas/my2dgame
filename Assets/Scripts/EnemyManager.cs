@@ -104,6 +104,7 @@ public class EnemyManager : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+           
         }
 
 
