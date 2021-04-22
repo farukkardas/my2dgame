@@ -34,7 +34,7 @@ public class EnemyManager : MonoBehaviour
             colliderBusy = true;
             other.gameObject.GetComponent<PlayerManager>().StayGetDamage(damage);
             StartCoroutine(damageTimer());
-            StartCoroutine(playerController.ThrowPlayer(0.02f, 350, playerController.transform.position));
+            other.gameObject.GetComponent<PlayerController>().ThrowPlayer();
         }
 
         if (other.gameObject.tag == "Bullet")
@@ -54,7 +54,7 @@ public class EnemyManager : MonoBehaviour
            
             other.GetComponent<PlayerManager>().StayGetDamage(damage);
             StartCoroutine(damageTimer());
-            StartCoroutine(playerController.ThrowPlayer(0.02f, 5f, playerController.transform.position));
+            other.gameObject.GetComponent<PlayerController>().ThrowPlayer();
 
 
         }

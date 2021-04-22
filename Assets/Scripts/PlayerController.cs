@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     public float groundCheckRadius;
     public LayerMask groundCheckLayer;
     public AudioSource jumpAudio;
+    public static float health;
+    
+
+
 
     void Awake()
     {
@@ -27,11 +31,13 @@ public class PlayerController : MonoBehaviour
     {
         playerRB = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        health = PlayerManager.health;
         HorizontalMove();
         OnGroundCheck();
         
@@ -55,10 +61,7 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpDelay());
         }
 
-        if (Input.GetKeyDown("h"))
-        {
-            ThrowPlayer(0.02f, 350, transform.position);
-        }
+     
     }
 
     void FixedUpdate()
@@ -74,10 +77,16 @@ public class PlayerController : MonoBehaviour
 
     void FlipFace()
     {
-        facingRight = !facingRight;
-        Vector3 tempLocalScale = transform.localScale;
-        tempLocalScale.x *= -1;
-        transform.localScale = tempLocalScale;
+        if (health > 1)
+        {
+            facingRight = !facingRight;
+            Vector3 tempLocalScale = transform.localScale;
+            tempLocalScale.x *= -1;
+            transform.localScale = tempLocalScale;
+        }
+   
+        
+       
     }
 
     void Jump()
@@ -86,15 +95,9 @@ public class PlayerController : MonoBehaviour
         jumpAudio.Play();
     }
 
-   public IEnumerator ThrowPlayer(float knockDur, float knockbackPwr, Vector3 knockbackDir)
+   public void ThrowPlayer()
     {
-        float timer = 0;
-        while (knockDur > timer)
-        {
-            timer += Time.deltaTime;
-            playerRB.AddForce(new Vector3(knockbackDir.x * -100, knockbackDir.y * knockbackPwr, transform.position.z));
-        }
-        yield return 0;
+        playerRB.AddForce(new Vector2(0,500f));
     }
 
     void OnGroundCheck()
