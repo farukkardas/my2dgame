@@ -14,7 +14,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject ReplayButton;
     public AudioSource takeDamageSound;
     public AudioSource shirukenSound;
-
+    public AudioSource coinSound;
     public AudioSource dieSound;
 
     // Start is called before the first frame update
@@ -23,7 +23,6 @@ public class PlayerManager : MonoBehaviour
     Transform muzzle;
     public Transform bullet, floatingText;
 
-    private PlayerController _playerController;
 
 
     void Start()
@@ -32,18 +31,25 @@ public class PlayerManager : MonoBehaviour
         muzzle = transform.GetChild(1);
         slider.maxValue = health;
 
-        moneyText.text = "x " + money.ToString();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         slider.value = health;
         playerAnimator.SetFloat("playerHealth", health);
         if (Input.GetKeyDown("space"))
         {
             ShootBullet();
         }
+        moneyText.text = "x " + money.ToString();
+    }
+    public void GainMoney()
+    {
+        money++;
+        coinSound.Play();
     }
 
     public void StayGetDamage(float damage)
@@ -74,7 +80,7 @@ public class PlayerManager : MonoBehaviour
         dieSound.Play();
         gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         health = 0;
-        Destroy(gameObject, 1);
+        Destroy(gameObject, 0.5f);
     }
 
 
@@ -105,4 +111,6 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(1);
         canShoot = true;
     }
+
+
 }
