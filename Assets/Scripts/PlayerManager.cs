@@ -1,11 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
     private Animator playerAnimator;
+    public Animation donmeAnimasyonu;
     public static float health = 100;
     public float money;
     public float bulletSpeed = 1f;
@@ -16,7 +19,10 @@ public class PlayerManager : MonoBehaviour
     public AudioSource shirukenSound;
     public AudioSource coinSound;
     public AudioSource dieSound;
-
+    public AudioSource gameOverSound;
+    public AudioSource christmasSong;
+    
+    
     // Start is called before the first frame update
     public Text moneyText;
     public Slider slider;
@@ -24,20 +30,27 @@ public class PlayerManager : MonoBehaviour
     public Transform bullet, floatingText;
 
 
+     void Awake()
+    {
+        health = 100;
+        slider.maxValue = health;
+    }
 
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
         muzzle = transform.GetChild(1);
-        slider.maxValue = health;
-
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.timeScale == 0)
+        {
+            christmasSong.Stop();
+        }
         slider.value = health;
         playerAnimator.SetFloat("playerHealth", health);
         if (Input.GetKeyDown("space"))
@@ -65,22 +78,27 @@ public class PlayerManager : MonoBehaviour
 
         if (health <= 0)
         {
-            Destroy(gameObject);
-            Time.timeScale = 0;
-            ReplayButton.SetActive(true);
+            DestroyPlayer();
         }
 
         slider.value = health;
-
         AmIDead();
     }
 
     public void DestroyPlayer()
     {
+        christmasSong.Stop();
         dieSound.Play();
-        gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+       FreezePlayer();
         health = 0;
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject, 0.8f);
+        
+        gameOverSound.PlayDelayed(1f);
+    }
+
+   public void FreezePlayer()
+    {
+        gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
 
@@ -90,6 +108,7 @@ public class PlayerManager : MonoBehaviour
         {
             dieSound.Play();
             dead = true;
+            
         }
     }
 

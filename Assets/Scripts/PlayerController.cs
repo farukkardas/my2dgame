@@ -61,13 +61,11 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(JumpDelay());
         }
 
+       
+
      
     }
 
-    void FixedUpdate()
-    {
-       
-    }
 
     void HorizontalMove()
     {
@@ -96,9 +94,12 @@ public class PlayerController : MonoBehaviour
     }
 
    public void ThrowPlayer()
-    {
-        playerRB.AddForce(new Vector2(0,500f));
-    }
+   {
+       playerRB.AddForce(new Vector2(-2500f,300f));
+       Debug.Log("knocback working");
+
+
+   }
 
     void OnGroundCheck()
     {
