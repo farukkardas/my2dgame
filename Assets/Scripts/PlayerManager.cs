@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     private Animator playerAnimator;
     public Animation donmeAnimasyonu;
     public static float health = 100;
-    public float money;
+    public static float money;
     public float bulletSpeed = 1f;
     private bool dead = false;
     private bool canShoot = true;
@@ -31,7 +31,8 @@ public class PlayerManager : MonoBehaviour
 
 
      void Awake()
-    {
+     {
+         money = 0;
         health = 100;
         slider.maxValue = health;
     }
