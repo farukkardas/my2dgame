@@ -7,37 +7,25 @@ using UnityEngine.UI;
 
 public class EndLevelScript : MonoBehaviour
 {
-   
     [SerializeField] private AudioSource winSound;
     public Text scoreText;
     public Button nextLevelButton;
     public Button replayButton;
-    void Start()
-    {
-    }
-
-    private void Update()
-    {
-   
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        CompleteLevel();
-    }
+    public GameObject NextLevelUI;
 
 
     private void OnTriggerStay2D(Collider2D other)
     {
+       other.gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
         CompleteLevel();
     }
 
     private void CompleteLevel()
     {
+        
         PlaySound();
         FirstLevelScore();
-        nextLevelButton.image.enabled = true;
-        replayButton.image.enabled = true;
+        NextLevelUI.SetActive(true);
     }
 
 
@@ -61,7 +49,7 @@ public class EndLevelScript : MonoBehaviour
             PlayerManager.money >= 5)
         {
             scoreText.enabled = true;
-            scoreText.text = "Level completed. You earned 3 star";
+            scoreText.text = "3 STAR";
         }
 
         else if (Time.timeSinceLevelLoad >= 40 && Time.timeSinceLevelLoad <= 60 && PlayerManager.money >= 3 ||
@@ -69,13 +57,13 @@ public class EndLevelScript : MonoBehaviour
                  PlayerManager.money >= 3 && PlayerManager.money < 5)
         {
             scoreText.enabled = true;
-            scoreText.text = "Level Completed. You earned 2 star";
+            scoreText.text = "2 STAR";
         }
 
         else
         {
             scoreText.enabled = true;
-            scoreText.text = "Level Completed. You earned 1 star";
+            scoreText.text = "1 STAR";
         }
     }
 }

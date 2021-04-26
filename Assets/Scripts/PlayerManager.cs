@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 public class PlayerManager : MonoBehaviour
 {
     private Animator playerAnimator;
-    public Animation donmeAnimasyonu;
-    public static float health = 100;
+    public static float health;
     public static float money;
+    private float delayTime = 3f;
     public float bulletSpeed = 1f;
     private bool dead = false;
     private bool canShoot = true;
@@ -21,45 +23,70 @@ public class PlayerManager : MonoBehaviour
     public AudioSource dieSound;
     public AudioSource gameOverSound;
     public AudioSource christmasSong;
-    
-    
-    // Start is called before the first frame update
+    public GameObject dieScreen;
+    public Text diedScore;
+    private static float score;
     public Text moneyText;
     public Slider slider;
     Transform muzzle;
     public Transform bullet, floatingText;
 
 
-     void Awake()
-     {
-         money = 0;
+    void Awake()
+    {
+        money = 0;
         health = 100;
-        slider.maxValue = health;
     }
+
 
     void Start()
     {
         playerAnimator = GetComponent<Animator>();
         muzzle = transform.GetChild(1);
-        
-        
+        slider.maxValue = health;
     }
 
-    // Update is called once per frame
+    private void LateUpdate()
+    {
+        CalculateScore();
+    }
+
+    
     void Update()
     {
+      
+        slider.value = health;
+
+
         if (Time.timeScale == 0)
         {
             christmasSong.Stop();
         }
-        slider.value = health;
+
+
         playerAnimator.SetFloat("playerHealth", health);
         if (Input.GetKeyDown("space"))
         {
             ShootBullet();
         }
+
         moneyText.text = "x " + money.ToString();
     }
+
+    private void CalculateScore()
+    {
+        score = money * 400;
+        score = score / Time.timeSinceLevelLoad;
+        diedScore.text = score.ToString("N0");
+        
+        if (score < 0)
+        {
+            score++;
+        }
+      
+        
+    }
+    
     public void GainMoney()
     {
         money++;
@@ -88,16 +115,17 @@ public class PlayerManager : MonoBehaviour
 
     public void DestroyPlayer()
     {
+        Invoke(nameof(DieScreenDelay), 0.8f);
+        // Invoke(nameof(DieScreenDelay),2f);
         christmasSong.Stop();
         dieSound.Play();
-       FreezePlayer();
+        FreezePlayer();
         health = 0;
-        Destroy(gameObject, 0.8f);
-        
+        Destroy(gameObject, 1.3f);
         gameOverSound.PlayDelayed(1f);
     }
 
-   public void FreezePlayer()
+    public void FreezePlayer()
     {
         gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
     }
@@ -109,7 +137,6 @@ public class PlayerManager : MonoBehaviour
         {
             dieSound.Play();
             dead = true;
-            
         }
     }
 
@@ -121,7 +148,6 @@ public class PlayerManager : MonoBehaviour
             tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
             tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
             shirukenSound.Play();
-            StartCoroutine(ShootDelay());
         }
     }
 
@@ -132,5 +158,8 @@ public class PlayerManager : MonoBehaviour
         canShoot = true;
     }
 
-
+    public void DieScreenDelay()
+    {
+        dieScreen.SetActive(true);
+    }
 }

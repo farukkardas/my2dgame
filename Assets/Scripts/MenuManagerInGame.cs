@@ -28,7 +28,6 @@ public class MenuManagerInGame : MonoBehaviour
 
     public void ReplayButton()
     {
-        
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
