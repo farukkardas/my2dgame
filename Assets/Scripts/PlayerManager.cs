@@ -56,21 +56,22 @@ public class PlayerManager : MonoBehaviour
     {
       
         slider.value = health;
-
+        playerAnimator.SetFloat("playerHealth", health);
+        moneyText.text = "x " + money.ToString();
 
         if (Time.timeScale == 0)
         {
             christmasSong.Stop();
         }
 
-
-        playerAnimator.SetFloat("playerHealth", health);
+        
         if (Input.GetKeyDown("space"))
         {
-            ShootBullet();
+            
+          ShootBullet();  
         }
 
-        moneyText.text = "x " + money.ToString();
+       
     }
 
     private void CalculateScore()
@@ -144,10 +145,12 @@ public class PlayerManager : MonoBehaviour
     {
         if (canShoot)
         {
+            StartCoroutine(ShootDelay());
             Transform tempBullet;
             tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
             tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
             shirukenSound.Play();
+            
         }
     }
 
