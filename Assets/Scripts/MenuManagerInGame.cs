@@ -7,13 +7,12 @@ public class MenuManagerInGame : MonoBehaviour
 {
     public GameObject inGameScreen, pauseScreen;
     bool isSound = false;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         
@@ -29,7 +28,7 @@ public class MenuManagerInGame : MonoBehaviour
     public void ReplayButton()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(1);
     }
 
     public void PlayButton()

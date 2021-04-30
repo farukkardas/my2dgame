@@ -24,13 +24,10 @@ public class PlayerManager : MonoBehaviour
     public AudioSource gameOverSound;
     public AudioSource christmasSong;
     public GameObject dieScreen;
-    public Text diedScore;
-    private static float score;
     public Text moneyText;
     public Slider slider;
     Transform muzzle;
     public Transform bullet, floatingText;
-
 
     void Awake()
     {
@@ -48,13 +45,11 @@ public class PlayerManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        CalculateScore();
     }
 
-    
+
     void Update()
     {
-      
         slider.value = health;
         playerAnimator.SetFloat("playerHealth", health);
         moneyText.text = "x " + money.ToString();
@@ -63,31 +58,9 @@ public class PlayerManager : MonoBehaviour
         {
             christmasSong.Stop();
         }
-
-        
-        if (Input.GetKeyDown("space"))
-        {
-            
-          ShootBullet();  
-        }
-
-       
     }
 
-    private void CalculateScore()
-    {
-        score = money * 400;
-        score = score / Time.timeSinceLevelLoad;
-        diedScore.text = score.ToString("N0");
-        
-        if (score < 0)
-        {
-            score++;
-        }
-      
-        
-    }
-    
+
     public void GainMoney()
     {
         money++;
@@ -141,7 +114,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void ShootBullet()
+    public void ShootBullet()
     {
         if (canShoot)
         {
@@ -150,7 +123,6 @@ public class PlayerManager : MonoBehaviour
             tempBullet = Instantiate(bullet, muzzle.position, Quaternion.identity);
             tempBullet.GetComponent<Rigidbody2D>().AddForce(muzzle.forward * bulletSpeed);
             shirukenSound.Play();
-            
         }
     }
 

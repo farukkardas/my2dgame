@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Bullet
   - Collectable
+  - LeftArrow
+  - RightArrow
   layers:
   - Default
   - TransparentFX

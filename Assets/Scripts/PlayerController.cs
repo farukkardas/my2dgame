@@ -1,6 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using TouchPhase = UnityEngine.TouchPhase;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,7 +13,6 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D playerRB;
     public float moveSpeed = 1f;
     bool facingRight = true;
-    private bool canJump = true;
     public float jumpDelay = 1.0f;
     public float jumpSpeed = 1f, jumpFrequency = 1f, nextjumpTime, jumpAudioFreq = 1f, nextAudioFreq;
     public bool isGrounded = false;
@@ -17,32 +21,100 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundCheckLayer;
     public AudioSource jumpAudio;
     public static float health;
-    
-
+    [SerializeField] private Button leftArrow;
+    [SerializeField] private Button rightArrow;
+    private bool moveLeft;
+    private bool dontMove;
+    private bool canJump = true;
 
 
     void Awake()
     {
     }
 
-
-    // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
-       
+        dontMove = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         health = PlayerManager.health;
-        HorizontalMove();
         OnGroundCheck();
-        
+        FlipFaceCondition();
+        HandleMoving();
+    }
 
 
+    private void HandleMoving()
+    {
+        playerAnimator.SetFloat("playerSpeed", Mathf.Abs(playerRB.velocity.x));
+        if (dontMove)
+        {
+            StopMoving();
+        }
+        else
+        {
+            if (moveLeft)
+            {
+                MoveLeft();
+            }
+            else if (!moveLeft)
+            {
+                MoveRight();
+            }
+        }
+    }
+
+    // CanDoJump methodu yerine bu da tercih edilebilir. Zemine basıp basmadığını kontrol edip ona göre karakter zıplayabiliyor.
+    
+    // private void OnCollisionEnter2D(Collision2D other)
+    // {
+    //     if (other.gameObject.layer == 8)
+    //     {
+    //         canJump = true;
+    //     }
+    // }
+    //
+    // private void OnCollisionExit2D(Collision2D other)
+    // {
+    //     if (other.gameObject.layer == 8)
+    //     {
+    //         canJump = false;
+    //         isGrounded = false;
+    //     }
+    // }
+
+    public void AllowMovement(bool movement)
+    {
+        dontMove = false;
+        moveLeft = movement;
+    }
+
+    public void DontAllowMovement()
+    {
+        dontMove = true;
+    }
+
+    private void MoveRight()
+    {
+        playerRB.velocity = new Vector2(-moveSpeed, playerRB.velocity.y);
+    }
+
+    private void MoveLeft()
+    {
+        playerRB.velocity = new Vector2(moveSpeed, playerRB.velocity.y);
+    }
+
+    private void StopMoving()
+    {
+        playerRB.velocity = new Vector2(0f, playerRB.velocity.y);
+    }
+
+    private void FlipFaceCondition()
+    {
         if (playerRB.velocity.x < 0 && facingRight)
         {
             FlipFace();
@@ -52,67 +124,48 @@ public class PlayerController : MonoBehaviour
         {
             FlipFace();
         }
-
-        if (Input.GetAxis("Vertical") > 0 && isGrounded && canJump && (nextjumpTime < Time.timeSinceLevelLoad))
-        {
-            nextAudioFreq = Time.timeSinceLevelLoad + jumpAudioFreq;
-            nextjumpTime = Time.timeSinceLevelLoad + jumpFrequency;
-            Jump();
-            StartCoroutine(JumpDelay());
-        }
-
-       
-
-     
     }
 
-
-    void HorizontalMove()
-    {
-        playerRB.velocity = new Vector2(Input.GetAxis("Horizontal") * moveSpeed, playerRB.velocity.y);
-        playerAnimator.SetFloat("playerSpeed", Mathf.Abs(playerRB.velocity.x));
-    }
 
     void FlipFace()
     {
-        if (health > 1)
+        if (health >= 1)
         {
             facingRight = !facingRight;
             Vector3 tempLocalScale = transform.localScale;
             tempLocalScale.x *= -1;
             transform.localScale = tempLocalScale;
         }
-   
-        
-       
     }
 
-    void Jump()
+    public void Jump()
     {
-        playerRB.AddForce(new Vector2(0f, jumpSpeed));
-        jumpAudio.Play();
+        if (isGrounded && canJump)
+        {
+            playerRB.velocity = new Vector2(playerRB.velocity.x, jumpSpeed);
+            jumpAudio.Play();
+            // StartCoroutine(CanDoJump());
+        }
+    }
+    
+    // Bu method karaktere knocback uyguluyor.
+    public void ThrowPlayer()
+    {
+        playerRB.AddForce(new Vector2(-2000f, 180f));
     }
 
-   public void ThrowPlayer()
-   {
-       playerRB.AddForce(new Vector2(-2500f,300f));
-       Debug.Log("knocback working");
-
-
-   }
-
+    //Karakterin zeminde olup olmadığını kontrol ediyor.
     void OnGroundCheck()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheckPosition.position, groundCheckRadius, groundCheckLayer);
         playerAnimator.SetBool("isGroundedJump", isGrounded);
     }
     
-    private IEnumerator JumpDelay()
+    // Aslında isgrounded zeminde olup olmadığını kontrol ediyor fakat ben yine de manuel olarak zıplamaya delay ekledim.
+    private IEnumerator CanDoJump()
     {
         canJump = false;
-        yield return new WaitForSeconds(jumpDelay);
+        yield return new WaitForSeconds(0.6f);
         canJump = true;
     }
-
-  
 }
